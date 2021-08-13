@@ -18,6 +18,9 @@ class UsuarioController extends Controller
         $usuario = $request->input('usuario');
         $response = Http::get("https://api.github.com/users/$usuario");
         $repos = Http::get("https://api.github.com/users/$usuario/repos");
+        if (isset((json_decode($response->body(), true))['message'])) {
+            return redirect('/');
+        }
         return view('usuarioBuscado', [
             'usuario' => json_decode($response->body(), true),
             'repos' => json_decode($repos->body(), true)
